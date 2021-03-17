@@ -2,7 +2,7 @@
 title: "analyst_project_2"
 output: html_notebook
 ---
-
+citation("RDAVIDWebService")
 
 
 ```{r}
@@ -287,9 +287,21 @@ david_up
 
 # vec <- c(1,2,3,4,5,6)
 # david_up['Name'] = vec
-# david_up
-head(members(david1),5)
-vec1 <- 
+david_up
+# head(members(david1),5)
+
+# david_up <- david_up %>% dplyr::select(-Members)
+up_pval <- c(head(david1@cluster[[1]][["Members"]][["PValue"]], 5))
+up_term <- c(head(david1@cluster[[1]][["Members"]][["Term"]],5))
+
+david1@cluster[[1]][["Members"]][["PValue"]]
+david1@cluster[[1]][["Members"]][["PValue"]]
+
+david1@cluster[[1]][["Members"]][["PValue"]]
+david1@cluster[[1]][["Members"]][["PValue"]]
+david1@cluster[[1]][["Members"]][["PValue"]]
+david1@cluster[[1]][["Members"]][["PValue"]]
+david1@cluster[[1]][["Members"]][["PValue"]]
 
 ```
 
