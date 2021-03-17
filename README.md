@@ -1,6 +1,6 @@
 # Project Description
 
-A brief description of what this repository is for and what it contains
+This repository is for replicating parts of the results in the paper "O’Meara et al. Transcriptional Reversion of Cardiac Myocyte Fate During Mammalian Cardiac Regeneration. Circ Res. Feb 2015. PMID: 25477501". This project is divided into three parts: data curator, programmer and analyst. It contains the bash code and R code that used to pre-processing the data and analyze the down-stream data.
 
 # Contributors
 
@@ -12,7 +12,9 @@ Arushi Shrivastava - arushi08@bu.edu
 
 # Repository Contents
 
-Provide a brief description of each script/code file in this repo, what it does, and how to execute it
+### qsub
+QSUB code used to extract the SRA file to FASTQ format and implement FASTQC for quality control
+
 ### analyst.Rmd
 
 ### downreg.csv
