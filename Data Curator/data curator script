@@ -1,0 +1,21 @@
+# load sratoolkit
+module load sratoolkit
+
+# downloaded file from GEO
+
+# making qsub file to extract the short reads to FASTQ format
+nano run_extract.qsub
+
+# running qsub job
+qsub run_extract.qsub
+
+# checking if information is consistent between both files
+head P0_1_1.fastq 
+head P0_1_2.fastq 
+
+# loading fastqc 
+module load fastqc
+
+
+# running fastqc on command line for both reads
+fastqc -o /projectnb/bf528/users/tinman/project2/data_curator/P0_1_1.fastq P0_1_2.fastq
