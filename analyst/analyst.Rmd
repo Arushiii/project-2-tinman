@@ -1,0 +1,295 @@
+---
+title: "analyst_project_2"
+output: html_notebook
+---
+
+
+
+```{r}
+# packages
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+
+# example data
+df <- read.table("/projectnb/bf528/users/tinman/Project2/analyst/gene_exp.diff", header = T)
+
+# project data
+diff <- read.table("/projectnb/bf528/users/tinman/Project2/Programmer/sample1/cuffdiff/cuffdiff_out/gene_exp.diff", header = T)
+```
+
+
+```{r question1}
+# Load the file cuffdiff_out/gene_exp.diff into R. 
+# Sort the data frame so that the smallest q_values are at the top (hint: look at the order function). 
+# Produce a table of the top ten differentially expressed genes, with their names, FPKM values, log fold change, p-value, and q-value in your report.
+conflict_prefer("select", "dplyr")
+# example data
+df_qval <- df %>% arrange(q_value)%>% select(gene, value_1, value_2, log2.fold_change., p_value, q_value)
+df_top10 <- head(df_qval, 10)
+df_lowq <- df %>% filter(q_value == 0.00330278) %>% distinct(gene) 
+
+# project data
+find_qval <- diff %>% arrange(q_value)
+diff_qval <- diff %>% arrange(q_value)%>% dplyr::select(gene, value_1, value_2, log2.fold_change., p_value, q_value)
+
+diff_qval1 <- diff %>% filter(q_value==0.00106929, significant=="yes") %>% dplyr::select(gene, value_1, value_2, log2.fold_change., p_value, q_value) %>% arrange(log2.fold_change.) %>% filter(log2.fold_change. != -Inf, log2.fold_change. != Inf)
+
+diff_qval1_2 <- diff %>% filter(q_value==0.00106929, significant=="yes") %>% dplyr::select(gene, value_2, value_1, log2.fold_change., p_value, q_value) %>% arrange(log2.fold_change.) %>% filter(log2.fold_change. != -Inf, log2.fold_change. != Inf)
+
+diff_qval2a <- diff %>% filter(q_value==0.00106929, significant=="yes") %>% dplyr::select(gene, value_1, value_2, log2.fold_change., p_value, q_value) %>% arrange(desc(log2.fold_change.)) %>% filter(log2.fold_change. != -Inf, log2.fold_change. != Inf)
+
+diff_qval2b <- diff %>% filter(q_value==0.00106929, significant=="yes") %>% dplyr::select(gene, value_1, value_2, log2.fold_change., p_value, q_value) %>% arrange(log2.fold_change.) %>% filter(log2.fold_change. != -Inf, log2.fold_change. != Inf)
+
+diff_qval2_2 <- diff %>% filter(significant=="yes") %>% dplyr::select(gene, value_1, value_2, log2.fold_change., p_value, q_value) %>% arrange(q_value) %>% arrange(desc(log2.fold_change.)) %>% filter(log2.fold_change. != -Inf, log2.fold_change. != Inf)
+
+diff_qval2_3 <- diff %>% filter(q_value==0.00106929) %>% dplyr::select(gene, value_1, value_2, log2.fold_change., p_value, q_value) %>% arrange(desc(log2.fold_change.)) %>% filter(log2.fold_change. != -Inf, log2.fold_change. != Inf)
+
+diff_qval
+diff_qval1
+diff_qval1_2
+diff_qval2a ########## < THIS ONE
+diff_qval2b
+#diff_qval2_2
+diff_qval2_3
+diff_top10 <- head(diff_qval, 10)
+# diff_lowq <- diff %>% filter(q_value == 0.00330278) %>% distinct(gene)
+
+diff_qval1_2
+
+head_a <- head(diff_qval2a,10)
+head_b <- head(diff_qval2b,10)
+
+write.table(head_a, "toptenFC.up", sep = "\t", quote = FALSE, row.names = F)
+write.table(head_b, "toptenFC.down", sep = "\t", quote = FALSE, row.names = F)
+
+```
+
+```{r question2}
+# Produce a histogram of the "log2.foldchange" column for all genes with the hist function. 
+# Try specifying different values for the breaks argument to control the number of bars in the plot and pick one you like best.
+
+# example data
+ggplot(df, aes(x=log2.fold_change.)) +
+  geom_histogram(bins=80)
+
+df_noInf <- df %>% filter(log2.fold_change.!=0)
+
+ggplot(df_noInf, aes(x=log2.fold_change.)) +
+  geom_histogram(bins=300)
+
+
+# project data
+ggplot(diff, aes(x=log2.fold_change.)) +
+  geom_histogram(bins=100)
+
+diff_noInf <- diff %>% filter(log2.fold_change.!=0)
+
+fchist <- ggplot(diff_noInf, aes(x=log2.fold_change.)) +
+  geom_histogram(bins=300)
+
+diff_noInf
+fchist
+```
+
+```{r question3}
+# Create a new data frame that contains only the genes where the last column, named "significant", is equal to "yes". 
+# The "subset" function is useful for this kind of task, for example if "df" is a data frame with a column named "A", then we can write "df.sub <- subset(df,A==”x”)".
+
+# example data
+df_significant <- df %>% filter(significant=='yes')
+
+# project data
+diff_significant <- diff %>% filter(significant=='yes')        # 2139 rows
+diff_psignificant <- diff %>% filter(significant=='yes', p_value < 0.01) 
+```
+
+```{r question4}
+# Create a second histogram of the log2 fold change values only for significant genes. What do you notice?
+
+# example data
+ggplot(df_significant, aes(x=log2.fold_change.)) +
+  geom_histogram(bins=80)
+
+# project data
+ggplot(diff_significant, aes(x=log2.fold_change.)) +
+  geom_histogram(bins=80)
+```
+
+```{r question5}
+# Further subset the significant gene data frame you just created into two separate data frames with only the up- and down-regulated genes using the "log2.foldchange" column.
+# Include the number of up and down regulated genes in your report.
+
+# example data
+df_upreg <- df_significant %>% filter(log2.fold_change. > 0)
+df_downreg <- df_significant %>% filter(log2.fold_change. < 0)
+df_upreg
+df_downreg
+
+# project data
+diff_upreg <- diff_significant %>% filter(log2.fold_change. > 0)
+diff_downreg <- diff_significant %>% filter(log2.fold_change. < 0)
+diff_upreg # 1,084 rows 
+diff_downreg # 1,055 rows
+```
+
+```{r question6}
+# Using the "write" function, write out the up- and down- regulated gene names to separate files. 
+# The files should have one gene name on each line (leave genes that are separated by commas on the same line as is). 
+# Copy these files to your laptop or desktop, as we will be uploading them to a web application to perform gene set analysis.
+
+# example data
+write.csv(df_upreg,file="/projectnb2/bf528/users/tinman/Project2/analyst/upreg_exp.csv")
+write.csv(df_downreg,file="/projectnb2/bf528/users/tinman/Project2/analyst/downreg_exp.csv")
+
+# project data
+write.csv(diff_upreg,file="/projectnb2/bf528/users/tinman/Project2/analyst/upreg.csv")
+write.csv(diff_downreg,file="/projectnb2/bf528/users/tinman/Project2/analyst/downreg.csv")
+```
+
+```{r question7}
+# DAVID Functional Annotation Clustering groups gene sets based on the genes they share. 
+# The output of this tool attempts to organize the enriched gene sets into functionally related clusters. 
+# The Score attribute of the clusters is equal to the "-log10(average p-value)" from enriched gene sets. 
+# In a web browser, go to http://david.abcc.ncifcrf.gov/summary.jsp.
+# a. On the left of the page, look for the Upload tab, and upload the up regulated gene list file, or copy and paste the gene list into the first text box.
+
+# example data
+upgenes_ex <- df_upreg %>% select(gene) %>% print(n=Inf)
+upgenes_ex %>% print.data.frame(row.names = FALSE)
+
+# project data
+upgenes <- diff_upreg %>% select(gene) %>% print(n=Inf)
+upgenes2 <- diff_upreg %>% select(gene)
+write.csv(upgenes,file="/projectnb2/bf528/users/tinman/Project2/analyst/upgeneslist.csv", row.names=FALSE)
+write.csv(upgenes2,file="/projectnb2/bf528/users/tinman/Project2/analyst/upgeneslist2.csv", row.names=FALSE)
+
+downgenes <- diff_downreg %>% select(gene) %>% print(n=Inf)
+downgenes2 <- diff_downreg %>% select(gene)
+write.csv(downgenes,file="/projectnb2/bf528/users/tinman/Project2/analyst/dogeneslist.csv", row.names=FALSE)
+write.csv(downgenes2,file="/projectnb2/bf528/users/tinman/Project2/analyst/dogeneslist2.csv", row.names=FALSE)
+write.table(downgenes2, file="/projectnb2/bf528/users/tinman/Project2/analyst/dogeneslist3.csv", sep = ",", row.names=FALSE)
+
+write.csv(t(upgenes2),file="/projectnb2/bf528/users/tinman/Project2/analyst/upgeneslist4.csv", row.names=FALSE, quote=FALSE)
+write.csv(t(downgenes2),file="/projectnb2/bf528/users/tinman/Project2/analyst/dogeneslist4.csv", row.names=FALSE, quote=FALSE)
+
+# b. Choose OFFICIAL_GENE_SYMBOL from the dropdown
+# c. Mark the Gene List radio button
+# d. Press Submit
+# e. On the next page (Annotation Summary Results), pick Mus Musculus from the box on the left and press Select Species.
+# f. On the page to the right, click Clear All, then expand the Gene_Ontology group and select GOTERM_BP_FAT, GOTERM_MF_FAT, and GOTERM_CC_FAT boxes
+# g. Click the Functional Annotation Clustering button
+# h. A window should appear containing a list of enriched GO terms organized into clusters based on functional relatedness
+# i. Examine these results, and save them to file if you wish
+# j. Follow this same process for the down regulated gene list
+```
+
+```{r deliverables 1}
+# Deliverables:
+
+# A table of the top 10 differentially expressed genes and statistics from 6.1
+div1 <- diff_top10
+div1
+```
+
+```{r deliverables 2}
+# A histogram of the log2 fold changes
+# fchist <- ggplot(diff_noInf, aes(x=log2.fold_change.)) +
+#   geom_histogram(bins=300)
+#   *** removed FC = 0 for more informative plot
+fc_hist <- fchist +
+  labs(
+    title = "Gene Log2 Fold Change Abundance",
+    x="Log2 FC",
+    y="Count") +
+  theme(plot.title=element_text(size=20, hjust=0.5, face="bold", colour="black", vjust=-1))+
+  theme(legend.position = "none")+ 
+  theme(panel.background = element_rect(fill = "white"))+ 
+  theme(panel.grid.major = element_line(colour = "white"))+
+  geom_vline(aes(xintercept = 0))
+```
+
+```{r deliverables 3}
+# A report of the number of differentially expressed genes detected at 𝑝<0.01, and the numbers of up- and down- regulated genes at this significance level ******** using significant = yes instead as this is a more stringent filter, if you add p <0.01 to significant there is no difference
+
+# p_sig <- diff_qval %>% filter(p_value<0.01)
+# up_p_sig <- p_sig %>% filter(log2.fold_change. > 0)
+# dow_p_sig <- p_sig %>% filter(log2.fold_change. < 0)
+#   
+# p_sig # 2,376 rows
+# up_p_sig # 1,187 rows
+# dow_p_sig # 1,189 rows
+# 
+# p_sig %>%
+# ggplot(aes(x=log2.fold_change.)) +
+#   geom_histogram(bins=300)+
+#   labs(
+#     title = "FC of Differentially Expressed Genes at p<0.01",
+#     subtitle = "1,189 down-regulated genes                                  1,187 up-regulated genes",
+#     x="Log2 FC",
+#     y="Count") +
+#   theme(plot.title=element_text(size=20, hjust=0.5, face="bold", colour="black", vjust=-1))+
+#   theme(plot.subtitle=element_text(size=12, hjust=0.5, vjust = -1, face="italic", color="dark grey"))+ 
+#   # theme(legend.position = "none")+ 
+#   theme(panel.background = element_rect(fill = "white"))+ 
+#   theme(panel.grid.major = element_line(colour = "white"))
+
+
+diff_significant
+diff_upreg # 1,084 rows 
+diff_downreg # 1,055 rows
+
+div3 <- diff_significant %>%
+ggplot(aes(x=log2.fold_change.)) +
+  geom_histogram(bins=300)+
+  labs(
+    title = "FC of Differentially Expressed Genes at p<0.01",
+    subtitle = "1,055 down-regulated genes                                  1,084 up-regulated genes",
+    x="Log2 FC",
+    y="Count") +
+  theme(plot.title=element_text(size=20, hjust=0.5, face="bold", colour="black", vjust=-1))+
+  theme(plot.subtitle=element_text(size=12, hjust=0.5, vjust = -1, face="italic", color="dark grey"))+
+  # theme(legend.position = "none")+
+  theme(panel.background = element_rect(fill = "white"))+
+  theme(panel.grid.major = element_line(colour = "white"))
+```
+
+```{r deliverables 4}
+# Two csv files containing the up- and down- regulated significant genes from 6.6
+
+```
+
+```{r deliverables 5}
+# A table summarizing the top cluster results from the DAVID analysis in 6.7
+
+# files upreg/downregcluster are results from DAVID
+# upregcluster <- read.table(
+#   "/projectnb/bf528/users/tinman/Project2/analyst/upregcluster.txt",
+#   sep="\t", header=F)
+# BiocManager::install("RDAVIDWebService")
+library("RDAVIDWebService")
+david1 <- DAVIDTermCluster("/projectnb/bf528/users/tinman/Project2/analyst/upregcluster.txt")
+head(summary(david1))
+higherEnrichment<-which.max(enrichment(david1))
+clusterGenes<-members(david1)[[higherEnrichment]]
+wholeCluster<-cluster(david1)[[higherEnrichment]]
+ids(clusterGenes)
+ids(david1)[[higherEnrichment]]
+plot2D(david1, 80)
+# conflict_prefer("select", "dplyr")
+# as.data.frame(wholeCluster) %>% dplyr::select(-Members.Genes,-Members.Category)
+# davidGODag<-DAVIDGODag(members(termCluster)[[clustNumber]], pvalueCutoff=0.1, "CC")
+# plotGOTermGraph(g=goDag(davidGODag), r=davidGODag, max.nchar=40, node.shape="ellipse")
+
+david1 <- DAVIDTermCluster("/projectnb/bf528/users/tinman/Project2/analyst/upregcluster.txt")
+david_up <- head(summary(david1))
+david_up
+
+# vec <- c(1,2,3,4,5,6)
+# david_up['Name'] = vec
+# david_up
+head(members(david1),5)
+vec1 <- 
+
+```
+
