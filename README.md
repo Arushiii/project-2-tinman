@@ -15,8 +15,11 @@ Programmer: Arushi Shrivastava - arushi08@bu.edu
 
 # Repository Contents
 
-### runextract.qsub
-QSUB code used to extract the SRA file to FASTQ format and implement FASTQC for quality control
+### run_extract.qsub
+QSUB code used to extract the SRA file to FASTQ format 
+
+### data curator script
+Code ran on command line to implement FASTQC on FASTQ files 
 
 ### analyst.Rmd
 
