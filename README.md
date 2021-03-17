@@ -1,14 +1,17 @@
 # Project Description
 
-This repository is for replicating parts of the results in the paper "O’Meara et al. Transcriptional Reversion of Cardiac Myocyte Fate During Mammalian Cardiac Regeneration. Circ Res. Feb 2015. PMID: 25477501". This project is divided into three parts: data curator, programmer and analyst. It contains the bash code and R code that used to pre-processing the data and analyze the down-stream data.
+This repository is for replicating parts of the results in the paper "O’Meara et al. Transcriptional Reversion of Cardiac Myocyte Fate During Mammalian Cardiac Regeneration". This project is divided into three parts: data curator, programmer and analyst. It contains the bash code and R code that used to pre-processing the data and analyze the down-stream data.
+
+O’Meara, C. C., Wamstad, J. A., Gladstone, R. A., Fomovsky, G. M., Butty, V. L., Shrikumar, A., Gannon, J. B., Boyer, L. A., & Lee, R. T. (2015). Transcriptional Reversion of Cardiac Myocyte Fate During Mammalian Cardiac Regeneration. Circulation Research, 116(5), 804–815. https://doi.org/10.1161/CIRCRESAHA.116.304269
+
 
 # Contributors
 
-Teresa Rice - tpillars@bu.edu
+Analyst: Teresa Rice - tpillars@bu.edu
 
-Maha Naim - mnaim21@bu.edu
+Data Curator: Maha Naim - mnaim21@bu.edu
 
-Arushi Shrivastava - arushi08@bu.edu
+Programmer: Arushi Shrivastava - arushi08@bu.edu
 
 # Repository Contents
 
