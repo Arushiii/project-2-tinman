@@ -1,8 +1,3 @@
-# load sratoolkit
-module load sratoolkit
-
-# downloaded file from GEO
-
 # making qsub file to extract the short reads to FASTQ format
 nano run_extract.qsub
 
