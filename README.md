@@ -22,10 +22,10 @@ QSUB code used to extract the SRA file to FASTQ format
 Code ran on command line to implement FASTQC on FASTQ files 
 
 ### analyst.Rmd
+.Rmd file with chunks to load in data, plot histograms, and analyze clusters produced from DAVID database.
 
-### downreg.csv
-
-### upreg.csv
+### downreg.csv & upreg.csv
+up- and down- regulated significant genes.
 
 ### dogeneslist4.csv & upgeneslist4.csv
 csv's created for uploading to david, need to manually copy and paste second half of the data to the site.
