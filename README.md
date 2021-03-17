@@ -23,4 +23,4 @@ Provide a brief description of each script/code file in this repo, what it does,
 csv's created for uploading to david, need to manually copy and paste second half of the data to the site.
 
 ### downregcluster.txt & upregcluster.txt
-output of david functional annotation clustering - was unable to use for this project, but it's a quick reference of clustering results.
+output of david functional annotation clustering - used with R package RDAVIDWebService to produce tables of cluster data.
